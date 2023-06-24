@@ -1,0 +1,43 @@
+{
+	"name": "油品管理",
+	"version": "1.0.0",
+	"description": "mobile",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "nigulasi_mazw_99",
+	"license": "ISC",
+	"dependencies": {
+		"lodash": "^4.17.21",
+		"moment": "^2.29.4",
+		"uview-ui": "^2.0.31",
+		"vuex": "^4.1.0"
+	},
+	"uni-app": {
+		"scripts": {
+			"油品管理H5-test": {
+				"title": "油品管理H5-test",
+				"BROWSER": "Chrome",
+				"env": {
+					"UNI_PLATFORM": "h5"
+				},
+				"define": {
+					"WXSC-PLATFORM": true
+				}
+			},
+			"油品管理H5-prod": {
+				"title": "油品管理H5-prod",
+				"env": {
+					"UNI_PLATFORM": "h5",
+					"ENV_PATH": "https://car-owner.51vip.biz/jeecg-boot-mobile",
+					"APPID": "wx37b4e341f8763f47",
+					"STATIC_IMG": "https://car-owner.51vip.biz/it/static"
+				},
+				"define": {
+					"WXSC-PLATFORM": true
+				}
+			}
+		}
+	}
+}
