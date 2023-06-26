@@ -9,6 +9,7 @@ import {
 	user_token,
 	user_tenant_id
 } from '../utils/constants.js'
+import tips from '@/common/utils/tip.js'
 let baseurl = configService.baseurl;
 const http = new Request()
 http.setConfig((config) => {
@@ -55,6 +56,7 @@ http.interceptor.response((response) => {
 	}
 }, (error) => {
 	uni.hideLoading()
+	tips.toast('响应错误，请稍后再试')
 	return error
 })
 export {
