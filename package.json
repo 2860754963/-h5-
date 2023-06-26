@@ -20,7 +20,8 @@
 				"title": "油品管理H5-test",
 				"BROWSER": "Chrome",
 				"env": {
-					"UNI_PLATFORM": "h5"
+					"UNI_PLATFORM": "h5",
+					"ENV_PATH": "http://localhost:8082"
 				},
 				"define": {
 					"WXSC-PLATFORM": true
@@ -30,7 +31,7 @@
 				"title": "油品管理H5-prod",
 				"env": {
 					"UNI_PLATFORM": "h5",
-					"ENV_PATH": "https://car-owner.51vip.biz/jeecg-boot-mobile",
+					"ENV_PATH": "http://localhost:8082/",
 					"APPID": "wx37b4e341f8763f47",
 					"STATIC_IMG": "https://car-owner.51vip.biz/it/static"
 				},

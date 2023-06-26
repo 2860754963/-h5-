@@ -1,6 +1,8 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import api from '@/api/index.js'
+import {
+	apiserve
+} from '@/api/index.js'
 import {
 	setItem,
 	getItem,
@@ -40,7 +42,7 @@ export default new Vuex.Store({
 			commit
 		}, loginInfo) {
 			// 在此可以调用 api中的调用的
-			api.login(loginInfo).then(res => {
+			apiserve.login(loginInfo).then(res => {
 				commit('set_token', res.token)
 				commit('set_userid', res.userid)
 				commit('set_userpsd', res.userpsd)
@@ -58,7 +60,7 @@ export default new Vuex.Store({
 		}) {
 			// 在此传入token
 			let token = state.token
-			api.logout(token).then(res => {
+			apiserve.logout(token).then(res => {
 				commit('set_token', res.token)
 				commit('set_userid', res.userid)
 				commit('set_userpsd', res.userpsd)

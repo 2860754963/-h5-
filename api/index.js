@@ -1,5 +1,13 @@
-// 在此引入 http
+import {
+	http
+} from '@/common/service/service.js'
+import {
+	trimObj
+} from '@/common/utils/trimObj.js'
 
+/**
+ * 登录登出api 需要在store中也调用
+ */
 const apiserve = {
 	login(params) {
 		return new Promise((resolve, reject) => {
@@ -24,4 +32,19 @@ const apiserve = {
 	}
 }
 
-export default apiserve
+const indexdata = {
+	getlunbo() {
+		return http.get('/api/getlunbo')
+	},
+	getnewlist() {
+		return http.get('/api/getnewslist')
+	},
+	getnewdetalis(params) {
+		return http.get(`/api/getnew/${params}`)
+	}
+}
+
+export {
+	apiserve,
+	indexdata
+}

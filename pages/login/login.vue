@@ -10,6 +10,7 @@
 			</u-form-item>
 		</u-form>
 		<u-button type="primary" :plain="true" text="登录" @click='login'></u-button>
+
 	</view>
 </template>
 
@@ -18,7 +19,9 @@
 		mapActions,
 		mapState
 	} from 'vuex'
-	import api from '@/api/index.js'
+	import {
+		apiserve
+	} from '@/api/index.js'
 	export default {
 		data() {
 			return {
@@ -50,7 +53,7 @@
 				this.$refs.uForm.validate()
 					.then(async res => {
 						this.$tip.loading()
-						let loginres = await api.login({
+						let loginres = await apiserve.login({
 							username: this.model.loginModel.username,
 							userpsd: this.model.loginModel.userpsd
 						})

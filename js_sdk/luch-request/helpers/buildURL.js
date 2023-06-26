@@ -3,7 +3,14 @@
 import * as utils from './../utils'
 
 function encode(val) {
-  return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']')
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']')
 }
 
 /**
@@ -13,16 +20,14 @@ function encode(val) {
  * @param {object} [params] The params to be appended
  * @returns {string} The formatted url
  */
-export default function buildURL(url, params, paramsSerializer) {
+export default function buildURL(url, params) {
   /*eslint no-param-reassign:0*/
   if (!params) {
     return url
   }
 
   var serializedParams
-  if (paramsSerializer) {
-    serializedParams = paramsSerializer(params)
-  } else if (utils.isURLSearchParams(params)) {
+  if (utils.isURLSearchParams(params)) {
     serializedParams = params.toString()
   } else {
     var parts = []
