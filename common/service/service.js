@@ -7,12 +7,26 @@ import {
 } from '../utils/storage.js'
 import {
 	user_token,
-	user_tenant_id
+	user_tenant_id,
+	set_token_get_time
 } from '../utils/constants.js'
 import tips from '@/common/utils/tip.js'
+import {
+	router
+} from '@/router/index.js'
+import store from '@/store/index.js'
+// 在此同样进行token 过期处理 后端也要进行处理 看情况吧
+const tokenTimeout = 60 //单位是s
+
+function checkTokenTime() {
+	let currentTime = Date.now()
+	let timeStamp = getItem(set_token_get_time)
+	return (currentTime - timeStamp) / 1000 < tokenTimeout
+}
 let baseurl = configService.baseurl;
 const http = new Request()
 http.setConfig((config) => {
+	console.log(config, "config");
 	/* 设置全局配置 */
 	config.baseUrl = baseurl /* 根域名不同 */
 	config.header = {
@@ -20,27 +34,40 @@ http.setConfig((config) => {
 	}
 	return config
 })
-// 请求拦截器 添加 token
+// 请求拦截器 添加 token 并本地检查token是否过期
 http.interceptor.request(config => {
-	uni.showLoading({
-		title: '请求中，请稍后',
-		mask: true
-	})
-	config.header = {
-		...config.header,
-		// 这里根据实际情况 是否添加自定义请求头
-		// 'X-Access-Token': getItem(user_token),
-		// 'tenant-id': getItem(user_tenant_id) || ''
-		// }
-		// // 	// if (hitRequestKey(config.url)) return;
-		// // 	// addRequesKey(config.url);
-		// // 	/*
-		// // 	if (!token) { // 如果token不存在，调用cancel 会取消本次请求，但是该函数的catch() 仍会执行
-		// // 	  cancel('token 不存在') // 接收一个参数，会传给catch((err) => {}) err.errMsg === 'token 不存在'
-		// // 	}
-		// // 	*/
+	if (getItem(user_token)) {
+		if (checkTokenTime()) {
+			uni.showLoading({
+				title: '请求中，请稍后',
+				mask: true
+			})
+			config.header = {
+				...config.header,
+				// 这里根据实际情况 是否添加自定义请求头
+				// 'X-Access-Token': getItem(user_token),
+				// 'tenant-id': getItem(user_tenant_id) || ''
+				// }
+				// // 	// if (hitRequestKey(config.url)) return;
+				// // 	// addRequesKey(config.url);
+				// // 	/*
+				// // 	if (!token) { // 如果token不存在，调用cancel 会取消本次请求，但是该函数的catch() 仍会执行
+				// // 	  cancel('token 不存在') // 接收一个参数，会传给catch((err) => {}) err.errMsg === 'token 不存在'
+				// // 	}
+				// // 	*/
+			}
+		} else {
+			setTimeout(() => {
+				tips.toast('token过期，请重新登录')
+			}, 500)
+			store.dispatch('logoutAction')
+			router.push('/pages/login/login')
+			return Promise.reject(new Error('token过期，请重新登录'))
+		}
 	}
 	return config
+}, error => {
+	return Promise.reject(error);
 })
 /**
  * 在响应拦截其中进行个性化拦截配置 （因为这里开启的是本地的服务）
@@ -53,6 +80,8 @@ http.interceptor.response((response) => {
 			data
 		} = response
 		return data
+	} else {
+		return response
 	}
 }, (error) => {
 	uni.hideLoading()

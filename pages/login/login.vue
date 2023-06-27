@@ -52,17 +52,23 @@
 			async login() {
 				this.$refs.uForm.validate()
 					.then(async res => {
-						this.$tip.loading()
+						this.$tip.loading('登陆中，请稍后')
 						let loginres = await apiserve.login({
 							username: this.model.loginModel.username,
 							userpsd: this.model.loginModel.userpsd
 						})
-						this.loginAction(loginres)
-						this.$tip.loaded()
-						this.$tip.toast('登录成功')
-						setTimeout(() => {
-							this.loginSuccess()
-						}, 1500)
+						console.log(loginres, "loginres");
+						if (loginres.result == '登录成功') {
+							this.loginAction(loginres)
+							this.$tip.loaded('登录成功')
+							setTimeout(() => {
+								//进行页面跳转
+								this.loginSuccess()
+							}, 1500)
+						} else {
+							this.$tip.toast('登录失败请重试！')
+						}
+
 					})
 					.catch(errors => {
 						console.log(errors, "errors");

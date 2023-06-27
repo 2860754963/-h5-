@@ -16,6 +16,7 @@ const apiserve = {
 					...params,
 					token: '123456789632155',
 					userid: '17719215834',
+					result: '登录成功'
 				})))
 			}, 1500)
 		})
@@ -23,10 +24,10 @@ const apiserve = {
 	logout(params) {
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {
-				JSON.parse(JSON.stringify({
+				resolve(JSON.parse(JSON.stringify({
 					...params,
 					result: '退出成功'
-				}))
+				})))
 			}, 1500)
 		})
 	}

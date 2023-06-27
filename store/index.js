@@ -12,8 +12,11 @@ import {
 	user_token,
 	user_id,
 	user_psd,
-	user_info
+	user_info,
+	set_token_get_time
 } from '@/common/utils/constants.js'
+import tips from '@/common/utils/tip.js'
+import moment from 'moment'
 Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
@@ -41,35 +44,30 @@ export default new Vuex.Store({
 		loginAction({
 			commit
 		}, loginInfo) {
-			// 在此可以调用 api中的调用的
-			apiserve.login(loginInfo).then(res => {
-				commit('set_token', res.token)
-				commit('set_userid', res.userid)
-				commit('set_userpsd', res.userpsd)
-				commit('set_userInfo', res)
-				// 存储到本地存储
-				setItem(user_token, res.token)
-				setItem(user_id, res.userid)
-				setItem(user_psd, res.userpsd)
-				setItem(user_info, res)
-			})
+			commit('set_token', loginInfo.token)
+			commit('set_userid', loginInfo.userid)
+			commit('set_userpsd', loginInfo.userpsd)
+			commit('set_userInfo', loginInfo)
+			setItem(user_token, loginInfo.token)
+			setItem(user_id, loginInfo.userid)
+			setItem(user_psd, loginInfo.userpsd)
+			setItem(user_info, loginInfo)
+			setItem(set_token_get_time, Date.now())
+
 		},
 		logoutAction({
 			commit,
 			state
-		}) {
-			// 在此传入token
-			let token = state.token
-			apiserve.logout(token).then(res => {
-				commit('set_token', res.token)
-				commit('set_userid', res.userid)
-				commit('set_userpsd', res.userpsd)
-				commit('set_userInfo', res)
-				removeItem(user_token)
-				removeItem(user_id)
-				removeItem(user_psd)
-				removeItem(user_info)
-			})
+		}, logoutInfo) {
+			// commit('set_token', res.token)
+			// commit('set_userid', res.userid)
+			// commit('set_userpsd', res.userpsd)
+			// commit('set_userInfo', res)
+			removeItem(user_token)
+			removeItem(user_id)
+			removeItem(user_psd)
+			removeItem(user_info)
+
 		}
 	},
 	getters: {},

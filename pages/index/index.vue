@@ -8,8 +8,11 @@
 		<view class="">
 			<u-button type="primary" shape="circle" @click='getlunbo'>获取轮播图数据</u-button>
 			<u-button type="primary" shape="circle" @click='getnewlist'>获取新闻信息列表</u-button>
-			<u-button type="primary" shape="circle" @click='getnewdetalis'>获取新闻信息详细信息</u-button>
+			<u-button type="primary" shape="circle" @click='getnewdetalis'>获取新闻39的详细信息</u-button>
 		</view>
+
+		<u-modal :show="exitshow" :title="'退出'" :content='"确定退出吗？"' showCancelButton closeOnClickOverlay
+			@close='exitshow=false' @cancel='exitshow=false' @confirm='exitconfirm'></u-modal>
 	</view>
 </template>
 
@@ -17,15 +20,49 @@
 	import {
 		indexdata
 	} from '@/api/index.js'
+	import {
+		apiserve
+	} from '@/api/index.js'
+	import {
+		mapActions,
+		mapState
+	} from 'vuex'
+	import {
+		getItem,
+		removeItem
+	} from '@/common/utils/storage.js'
+	import {
+		user_token
+	} from '@/common/utils/constants.js'
 	export default {
 		data() {
 			return {
+				exitshow: false,
 				title: 'Hello',
-				baseurl: process.env.ENV_PATH
+				baseurl: process.env.ENV_PATH,
 			}
 		},
 		onLoad() {},
+		onNavigationBarButtonTap() {
+			console.log('确定要退出码？');
+			this.exitshow = true
+		},
 		methods: {
+			...mapActions(['logoutAction']),
+			async exitconfirm() {
+				this.$tip.loading('退出中')
+				let token = getItem(user_token)
+				let res = await apiserve.logout(token)
+				if (res.result == '退出成功') {
+					this.logoutAction(res)
+					this.$tip.loaded('退出成功')
+					setTimeout(() => {
+						this.exitshow = false
+						this.$router.push('/pages/login/login')
+					}, 1500)
+				}
+				console.log(res, "res");
+			},
 			async getlunbo() {
 				let res = await indexdata.getlunbo()
 				console.log(res, "res");

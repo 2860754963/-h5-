@@ -73,5 +73,12 @@
 		"devServer": {
 			"port": 7080
 		}
+	},
+	// 通用请求超时时间  同样适用luch-request 请求超时时间，
+	"networkTimeout": {
+		"request": 4000,
+		"connectSocket": 3000,
+		"uploadFile": 4000,
+		"downloadFile": 5000
 	}
 }
