@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<u-navbar title="个人中心" @rightClick="rightClick" @leftClick='leftClick'>
+		<u-navbar title="个人中心" @rightClick="rightClick" @leftClick='leftClick' rightText='右侧内容'>
 		</u-navbar>
 	</view>
 </template>
@@ -19,7 +19,9 @@
 			leftClick() {
 				console.log('left');
 				uni.navigateBack({
-					delta: 1
+					delta: 1,
+					animationType: 'pop-out',
+					animationDuration: 900
 				})
 			}
 		}
