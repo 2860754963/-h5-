@@ -46,7 +46,15 @@
 				"navigationBarTitleText": "购物车列表",
 				"enablePullDownRefresh": false
 			}
-
+		}, {
+			"path": "pages/mylist/mylist",
+			"style": {
+				//取消顶部导航栏
+				// "navigationStyle": "custom",
+				"titleNView": false,
+				"navigationBarTitleText": "我的列表",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"globalStyle": {

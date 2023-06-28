@@ -1,7 +1,6 @@
 <template>
 	<view class="main">
-		主页面
-		<router-link to="/pages/indexlist/indexlist">mylist</router-link>
+		<!-- 	<router-link to="/pages/indexlist/indexlist">mylist</router-link>
 		<view class="">
 			{{baseurl}}
 		</view>
@@ -9,6 +8,11 @@
 			<u-button type="primary" shape="circle" @click='getlunbo'>获取轮播图数据</u-button>
 			<u-button type="primary" shape="circle" @click='getnewlist'>获取新闻信息列表</u-button>
 			<u-button type="primary" shape="circle" @click='getnewdetalis'>获取新闻39的详细信息</u-button>
+		</view> -->
+
+		<view class="lunbo">
+			<u-swiper :list="lunboindex" previousMargin="50" nextMargin="50" circular :autoplay="false" radius="5"
+				bgColor="#ffffff" height='420' indicator :loading='swiperLoading' @click='swiperClick'></u-swiper>
 		</view>
 
 		<u-modal :show="exitshow" :title="'退出'" :content='"确定退出吗？"' showCancelButton closeOnClickOverlay
@@ -34,12 +38,17 @@
 	import {
 		user_token
 	} from '@/common/utils/constants.js'
+	import {
+		forEach
+	} from 'lodash'
 	export default {
 		data() {
 			return {
 				exitshow: false,
 				title: 'Hello',
 				baseurl: process.env.ENV_PATH,
+				lunboindex: [],
+				swiperLoading: true
 			}
 		},
 		onLoad() {},
@@ -49,6 +58,22 @@
 		},
 		methods: {
 			...mapActions(['logoutAction']),
+			swiperClick(index) {
+				console.log(`点击了第${index}张`);
+				if (index === 0) {
+					uni.navigateTo({
+						url: '/pages/indexlist/indexlist'
+					})
+				} else if (index === 1) {
+					uni.navigateTo({
+						url: '/pages/shoplist/shoplist'
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/mylist/mylist'
+					})
+				}
+			},
 			async exitconfirm() {
 				this.$tip.loading('退出中')
 				let token = getItem(user_token)
@@ -74,6 +99,19 @@
 			async getnewdetalis() {
 				let res = await indexdata.getnewdetalis(39)
 				console.log(res);
+			},
+			async getlunboData() {
+				this.swiperLoading = true
+				let res = await indexdata.getlunbo()
+				if (res.status == 0) {
+					res.message.forEach(item => {
+						this.lunboindex.push(item.img)
+						this.swiperLoading = false
+					})
+				} else {
+					this.$tip.toast('获取轮播数据错误')
+					this.swiperLoading = true
+				}
 			}
 		},
 		mounted() {
@@ -81,9 +119,14 @@
 			// var backbutton = document.getElementsByClassName('uni-page-head-hd')[0]
 			// if (backbutton) backbutton.style.display = 'none';
 		},
+		created() {
+			this.getlunboData()
+		}
 	}
 </script>
 
-<style>
-
+<style scoped lang="scss">
+	.lunbo {
+		margin-top: 10rpx;
+	}
 </style>

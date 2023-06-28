@@ -16,7 +16,7 @@ import {
 } from '@/router/index.js'
 import store from '@/store/index.js'
 // 在此同样进行token 过期处理 后端也要进行处理 看情况吧
-const tokenTimeout = 60 //单位是s
+const tokenTimeout = 3600 //单位是s
 
 function checkTokenTime() {
 	let currentTime = Date.now()
@@ -45,7 +45,7 @@ http.interceptor.request(config => {
 			config.header = {
 				...config.header,
 				// 这里根据实际情况 是否添加自定义请求头
-				// 'X-Access-Token': getItem(user_token),
+				'X-Access-Token': getItem(user_token),
 				// 'tenant-id': getItem(user_tenant_id) || ''
 				// }
 				// // 	// if (hitRequestKey(config.url)) return;

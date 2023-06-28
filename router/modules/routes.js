@@ -28,6 +28,14 @@ const routes = [{
 		meta: {
 			title: '购物车列表',
 		},
+	},
+	{
+		//注意：path必须跟pages.json中的地址对应，最前面别忘了加'/'哦 
+		path: "/pages/mylist/mylist",
+		name: 'shoplist',
+		meta: {
+			title: '我的列表',
+		},
 	}
 ]
 export default routes
